@@ -1,0 +1,15 @@
+Stu: Amir Hossein Maddahi
+Stu NO: 403137004
+Date of Approval: 25/01/1404
+Article Title: TORCHFX: A MODERN APPROACH TO AUDIO DSP WITH PYTORCH AND GPU ACCELERATION
+Project scope: Writing the code for the block diagaram provided in the document and rebuilding it 
+
+Summary:
+TORCHFX is a toolset implemented in order to facilitate and ease audio processing.
+The overall algorythm is to embed the audio file into a wave and proceed with changes.
+Among the features of TORCHFX, the application of modules and pipelines stand out as the key features.
+
+Project Contents:
+1 - Filters
+
+1 - Filters:
