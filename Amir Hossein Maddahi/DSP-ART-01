@@ -642,3 +642,144 @@ def compute_order(o: int, scale: FilterOrderScale) -> int:
             return o // 6
         case "linear":
             return o
+----------------------------------------------------------------------------------------------------------
+2 - Main Body:
+----------------------------------------------------------------------------------------------------------
+2 - 1 - Init:
+----------------------------------------------------------------------------------------------------------
+import torchfx.filter as filter
+import torchfx.typing as typing
+from torchfx.effects import FX
+from torchfx.wave import Wave
+
+__all__ = ["FX", "Wave", "filter", "typing"]
+----------------------------------------------------------------------------------------------------------
+2 - 2 - Effects:
+----------------------------------------------------------------------------------------------------------
+import abc
+from torch import nn, Tensor
+from typing_extensions import override
+
+
+class FX(nn.Module, abc.ABC):
+    """Abstract base class for all effects.
+    This class defines the interface for all effects in the library. It inherits from
+    `torch.nn.Module` and provides the basic structure for implementing effects.
+    """
+    @abc.abstractmethod
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+    @override
+    @abc.abstractmethod
+    def forward(self, x: Tensor) -> Tensor: ...
+----------------------------------------------------------------------------------------------------------
+2 - 3 - Typing:
+----------------------------------------------------------------------------------------------------------
+import typing as tp
+
+from annotated_types import Ge, Le
+import torch
+
+Decibel = tp.Annotated[float, Le(0)]
+Millisecond = tp.Annotated[int, Ge(0)]
+Second = tp.Annotated[float, Ge(0)]
+BitRate = tp.Literal[16, 24, 32]
+
+#: Type of spectrogram to compute.
+#: It can be either "mel", "linear", or "log".
+SpecScale = tp.Literal["mel", "lin", "log"]
+
+#: Type of filter to apply.
+#: It can be either a string ("low" or "high") or a tuple of two floats.
+FilterType = tp.Literal["low", "high"]
+
+#: Type of filter order.
+#: It can be either a string ("linear" or "db") or an integer.
+FilterOrderScale = tp.Literal["db", "linear"]
+
+#: Type of device to use for computation.
+#: It can be either a string ("cpu" or "cuda") or a torch.device object.
+# The string "cuda" will use the first available CUDA device.
+Device = tp.Literal["cpu", "cuda"] | torch.device
+
+#: Type of window functions.
+#: See `scipy.signal.get_window` for more information.
+WindowType = tp.Literal[
+    "hann",
+    "hamming",
+    "blackman",
+    "kaiser",
+    "boxcar",
+    "bartlett",
+    "flattop",
+    "parzen",
+    "bohman",
+    "nuttall",
+    "barthann",
+]
+----------------------------------------------------------------------------------------------------------
+2 - 4 - Wave:
+----------------------------------------------------------------------------------------------------------
+import typing as tp
+from collections.abc import Callable
+from pathlib import Path
+
+import torchaudio
+from numpy.typing import ArrayLike
+from torch import Tensor, nn
+from typing_extensions import Self
+
+from torchfx.effects import FX
+from torchfx.filter.__base import AbstractFilter
+from torchfx.typing import Device
+
+
+class Wave:
+    ys: Tensor
+    fs: int
+    __device: Device  # private field
+    def __init__(self, ys: ArrayLike, fs: int, device: Device = "cpu") -> None:
+        self.fs = fs
+        self.ys = Tensor(ys)
+        self.to(device)
+    @property
+    def device(self) -> Device:
+        return self.__device
+    @device.setter
+    def device(self, device: Device) -> None:
+        self.to(device)
+    def to(self, device: Device) -> Self:
+        self.__device = device
+        self.ys = self.ys.to(device)
+        return self
+    def transform(self, func: Callable[..., Tensor], *args, **kwargs) -> "Wave":
+        return Wave(func(self.ys, *args, **kwargs), self.fs)
+    @classmethod
+    def from_file(cls, path: str | Path, *args, **kwargs) -> "Wave":
+        data, fs = torchaudio.load(path, *args, **kwargs)
+        return cls(data, fs)
+    def __or__(self, f: nn.Module) -> "Wave":
+        if not isinstance(f, nn.Module):
+            raise TypeError(f"Expected nn.Module, but got {type(f).__name__} instead.")
+        if isinstance(f, FX):
+            if hasattr(f, "fs") and f.fs is None:
+                f.fs = self.fs  # type: ignore
+            if isinstance(f, AbstractFilter) and not f._has_computed_coeff:
+                f.compute_coefficients()
+        if isinstance(f, nn.Sequential) or isinstance(f, nn.ModuleList):
+            for a in f:
+                if isinstance(a, FX):
+                    if hasattr(a, "fs") and a.fs is None:
+                        a.fs = self.fs  # type: ignore
+                    if isinstance(a, AbstractFilter) and not a._has_computed_coeff:
+                        a.compute_coefficients()
+        return self.transform(f.forward)
+    def __len__(self) -> int:
+        return self.ys.shape[1]
+    def channels(self) -> int:
+        return self.ys.shape[0]
+    def get_channel(self, index: int) -> "Wave":
+        return Wave(self.ys[index], self.fs)
+    def duration(self, unit: tp.Literal["sec", "ms"]) -> float:
+        return len(self) / self.fs * (1000 if unit == "ms" else 1)
