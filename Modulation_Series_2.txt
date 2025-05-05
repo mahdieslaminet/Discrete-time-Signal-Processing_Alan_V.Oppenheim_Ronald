@@ -1,0 +1,16 @@
+[Series 2: Amplitude Modulation (AM)]
+
+1. Write the equation of an AM signal.
+   Answer: s(t) = A_c[1 + m * x(t)] * cos(2πf_c t)
+
+2. What is the valid range for the modulation index (m) in AM?
+   Answer: 0 ≤ m ≤ 1. (If m > 1, distortion occurs.)
+
+3. Why is a multiplier modulator used in AM?
+   Answer: To combine the message signal x(t) with the carrier cos(2πf_c t).
+
+4. What is the application of DSB-SC modulation?
+   Answer: Transmitting signals without the carrier to save power in communication systems.
+
+5. Why is carrier power wasted in AM?
+   Answer: Because the carrier carries no information, it is used only for transmission.

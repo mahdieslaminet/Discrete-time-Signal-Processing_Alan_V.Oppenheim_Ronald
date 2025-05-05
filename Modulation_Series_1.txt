@@ -1,0 +1,20 @@
+[Series 1: Basic Concepts of Modulation]
+
+1. What is modulation and why is it used in communications?
+   Answer: It is the process of varying parameters of a carrier signal (such as amplitude, frequency, or phase) with the information signal.
+           Used to efficiently transmit signals over communication channels and increase range.
+
+2. Name the main types of analog modulation.
+   Answer:
+     - Amplitude Modulation (AM)
+     - Frequency Modulation (FM)
+     - Phase Modulation (PM)
+
+3. What are the characteristics of a carrier signal?
+   Answer: Usually a high-frequency sinusoidal wave whose amplitude, frequency, or phase is modified by the message signal.
+
+4. How is bandwidth calculated in AM modulation?
+   Answer: BW = 2 * f_m, where f_m is the highest frequency of the message signal.
+
+5. Why does FM have less noise compared to AM?
+   Answer: Because information is stored in frequency variations, and noise generally affects amplitude.

@@ -1,0 +1,16 @@
+[Series 5: Calculations and Analysis]
+
+1. If f_c = 100 MHz and f_m = 5 kHz, what is the AM bandwidth?
+   Answer: BW = 2 × 5 kHz = 10 kHz
+
+2. Write a PM signal with k_p = 10 rad/V and x(t) = 2 cos(2π1kHz t).
+   Answer: s(t) = A_c * cos(2πf_c t + 20 cos(2π1kHz t))
+
+3. If Δf = 75 kHz and f_m = 15 kHz, what is the FM modulation index?
+   Answer: β = 75 / 15 = 5
+
+4. In a QPSK system, what is the symbol rate if the bit rate is 20 Mbps?
+   Answer: R_s = 20 / 2 = 10 Msymbol/s
+
+5. What is the total AM power if P_c = 100 W and m = 0.8?
+   Answer: P_total = P_c × (1 + m²/2) = 100 × 1.32 = 132 W

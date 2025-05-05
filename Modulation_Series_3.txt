@@ -1,0 +1,16 @@
+[Series 3: Frequency Modulation (FM)]
+
+1. Write the FM signal equation.
+   Answer: s(t) = A_c * cos(2πf_c t + 2πk_f ∫x(t)dt)
+
+2. How is the modulation index (β) in FM calculated?
+   Answer: β = Δf / f_m, where Δf is the frequency deviation.
+
+3. What is the FM signal bandwidth using Carson’s Rule?
+   Answer: BW ≈ 2(Δf + f_m)
+
+4. What is the main advantage of FM over AM?
+   Answer: Greater immunity to noise and better audio quality.
+
+5. Is FM used in high frequencies? Why?
+   Answer: Yes, for example in FM radio (88–108 MHz), due to its wider bandwidth.

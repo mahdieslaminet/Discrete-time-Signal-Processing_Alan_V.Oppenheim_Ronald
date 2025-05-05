@@ -1,0 +1,18 @@
+[Series 4: Digital Modulation]
+
+1. What is the difference between ASK and FSK?
+   Answer:
+     - ASK: Varies the carrier amplitude based on digital data.
+     - FSK: Varies the carrier frequency based on digital data.
+
+2. How does QAM modulation work?
+   Answer: It combines two carrier signals with 90-degree phase difference to transmit more data.
+
+3. Why is PSK less error-prone than ASK?
+   Answer: Because phase changes are more resistant to noise than amplitude changes.
+
+4. What is the advantage of digital modulation over analog?
+   Answer: Higher noise immunity, error correction capabilities, and easier processing.
+
+5. What is the application of OFDM modulation?
+   Answer: Used in WiFi, LTE, and DSL due to resistance to multipath interference.
