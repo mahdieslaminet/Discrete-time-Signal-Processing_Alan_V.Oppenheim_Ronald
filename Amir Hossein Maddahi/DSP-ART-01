@@ -783,3 +783,4 @@ class Wave:
         return Wave(self.ys[index], self.fs)
     def duration(self, unit: tp.Literal["sec", "ms"]) -> float:
         return len(self) / self.fs * (1000 if unit == "ms" else 1)
+----------------------------------------------------------------------------------------------------------
